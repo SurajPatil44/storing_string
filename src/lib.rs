@@ -14,10 +14,10 @@ impl Node {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug,Clone,Copy)]
 struct Trie {
     root : Node,
-    children : [Option<Node>;26],
+    children : [Option<Trie>;26],
 }
 
 impl Trie {
@@ -26,6 +26,71 @@ impl Trie {
             root,
             children : [None;26]
         }
+    }
+    fn is_present_helper(&self,trie : Trie,expeted : char,cur_sz: usize,actual_sz : usize) -> bool {
+
+        if trie.root.member == expeted {
+            if trie.root.is_terminal() && cur_sz == actual_sz {
+                return true;
+            } else {
+                for child in trie.children.into_iter() {
+                    if child.is_none() {
+                        continue;
+                    } else {
+                        let nchild = child.unwrap();
+                        return self.is_present_helper(nchild, expeted,cur_sz+1, actual_sz);
+                    }
+                } 
+            } 
+        } else {
+            return false;
+        }
+        false
+    }
+    fn is_present(&self,word:&str) -> bool {
+        false
+    }
+
+    fn create_child(&self,child_node : Node) -> Trie{
+        let place = child_node,member as usize - 'a' as usize;
+        let new_child = Trie::new(child_node);
+        self.children[place] = Some(new_node);
+        new_node
+    }
+
+    fn insert_word(self,word : &str) -> Trie {
+        let sz = word.len();
+        let mut c = word.chars().next();
+        let mut check = 0usize;
+        //let mut terminal = false;
+        let mut trie;
+        if c.is_some(){
+            check += 1;
+            if check == sz {
+                //terminal = true;
+                self = Trie::new(Node::new(c,true));
+                return self;
+            }
+            self = Trie::new(Node::new(c,false));
+
+            trie = self;
+
+            loop {
+                match word.chars().next() {
+                    Some(c) => {
+                        check += 1;
+                        if(check == sz) {
+                            trie = trie.create_child(Node::new(c,true));
+                            return self;
+                        }
+                        trie = trie.create_child(Node::new(c,true));
+                    }
+                    None => break
+                }
+                
+            }
+        }
+        //todo!();
     }
 }
 
@@ -53,7 +118,11 @@ mod tests {
     }
     #[test]
     fn trie_creation() {
-        let n1 = Node::new('a',false);
+        let n1 = Node::new('a',false)
         let trie = Trie::new(n1);
+    }
+
+    fn check_insert_word() {
+        
     }
 }
