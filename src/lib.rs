@@ -8,6 +8,7 @@ pub struct trinode {
     terminal: bool,
 }
 
+#[allow(clippy::new_without_default)]
 impl trinode {
     pub fn new() -> Self {
         let children: [Option<Box<RefCell<trinode>>>; 256] = {
