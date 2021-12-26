@@ -40,12 +40,11 @@ impl trinode {
     }
 
     fn print_words_rec(&self, prefix: &mut String) {
-
         if self.terminal {
             println!("Word : {}", prefix);
             //prefix.clear();
         }
-        
+
         if self.children.iter().all(|x| x.is_none()) {
             prefix.clear();
         }
